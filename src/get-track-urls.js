@@ -1,3 +1,5 @@
+const { disableAssets } = require('./disable-assets');
+
 const extractUrls = () => {
   const trackItems = document.querySelectorAll('.trackItem__content .trackItem__trackTitle');
   const trackUrls = [];
@@ -10,8 +12,11 @@ const extractUrls = () => {
 
 const getTrackUrls = async (browser, url) => {
   const page = await browser.newPage();
+  
   await page.setViewport({ width: 1280, height: 926 });
+  await disableAssets(page);
   await page.goto(url);
+
   // change 3rd parameter for max num of songs in tracklist - can't get around soundcloud login to automatically get playlist track amount
   let trackUrls = await scrapeInfiniteScrollItems(page, extractUrls, 22);
   return trackUrls;
